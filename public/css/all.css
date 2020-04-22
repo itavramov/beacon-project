@@ -1,0 +1,101 @@
+body,
+h1,
+h2,
+p {
+    padding: unset;
+    margin: unset;
+}
+
+h1 {
+    font-size: 30px;
+    color: #21acd4;
+}
+
+.container {
+    width: 80%;
+    max-width: 1400px;
+    margin: auto;
+}
+
+.project-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 150px;
+    border-bottom: 2px solid #21acd4;
+}
+
+.project-info img {
+    height: 100%;
+}
+
+.last-use-header {
+    margin-top: 25px;
+    margin-bottom: 5px;
+    color: #21acd4;
+}
+
+.last-use-container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin: auto;
+    height: 75px;
+    border: 2px solid #21acd4;
+    border-radius: 4px;
+}
+
+.last-use-info {
+    width: 15%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.last-use-info h2 {
+    height: 30%;
+    font-size: 16px;
+    text-align: center;
+    padding-top: 4px;
+}
+
+.last-use-info .data {
+    width: 100%;
+    height: 70%;
+    border-top: 2px solid #21acd4;
+    display: inherit;
+    justify-content: center;
+    align-items: center;
+    color: #21acd4;
+    font-weight: 900;
+    font-size: 25px;
+}
+
+.last-use-container span {
+    margin-left: 5px;
+}
+
+.beacon-img {
+    width: 30%;
+    margin-left: 35%;
+}
+
+footer {
+    padding-top: 8px;
+    margin-top: 20px;
+    width: 100%;
+    background: #252525;
+    border-top: 4px solid #21acd4;;
+    height: 50px;
+}
+
+.terms {
+    font-size: 12px;
+    line-height: 1.67;
+    letter-spacing: normal;
+    text-align: left;
+    color: #828282;
+    padding-left: 15px;
+    font-style: italic;
+}
