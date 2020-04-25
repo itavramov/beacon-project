@@ -13,29 +13,88 @@ use Symfony\Component\Routing\Annotation\Route;
 class BeaconController extends AbstractController
 {
     protected $beaconService;
+    protected $entityManager;
 
-    public function __construct(BeaconService $beaconService)
-    {
+    public function __construct(
+        BeaconService $beaconService,
+        EntityManagerInterface $entityManager
+    ) {
         $this->beaconService = $beaconService;
+        $this->entityManager = $entityManager;
     }
 
     /**
-     * @Route("/beacon-hit", name="beacon-hit")
+     * @Route("/detect", name="detect")
      */
-    public function beaconConnect(
-        Request $request,
-        EntityManagerInterface $entityManager
+    public function beaconDetect(
+        Request $request
     ){
+
+        //$data = json_decode($request->getContent());
         $data = [
-            'device_id' => '3',
-            'connected' => new \DateTime(),
-            'disconnected' => new \DateTime(),
-            'beacon_id' => '6',
-            'beacon_room' => '1012'
+          'deviceAddress' => "FA:42:CD:E1:FF:B0",
+            'tableId' => 'Room 15'
         ];
+        $responseData = [ 'isStored' => false ];
 
-        //$this->beaconService->storeBeaconHit($data);
+        if ($this->beaconService->storeDetectSignal($data)) {
+            $responseData = [ 'isStored' => true ];
+        }
 
-        die;
+        return $this->json($responseData, $status = 200, $headers = [], $context = []);
+    }
+
+    /**
+ * @Route("/connect", name="connect")
+ */
+    public function beaconConnect(
+        Request $request
+    ){
+
+        //$data = json_decode($request->getContent());
+        $data = [
+            'deviceAddress' => "FA:42:CD:E1:FF:B0",
+            'tableId' => 'Room 155'
+        ];
+        $responseData = [ 'isStored' => false ];
+
+        if ($this->beaconService->updateBeaconConnectionTime($data)) {
+            $responseData = [ 'isStored' => true ];
+        }
+
+        return $this->json($responseData, $status = 200, $headers = [], $context = []);
+    }
+
+    /**
+     * @Route("/disconnect", name="disconnect")
+     */
+    public function beaconDisconnect(
+        Request $request
+    ){
+
+        //$data = json_decode($request->getContent());
+        $data = [
+            'deviceAddress' => "FA:42:CD:E1:FF:B0",
+            'tableId' => 'Room 15'
+        ];
+        $responseData = [ 'isStored' => false ];
+
+        if ($this->beaconService->updateBeaconDisconnectionTime($data)) {
+            $responseData = [ 'isStored' => true ];
+        }
+
+        return $this->json($responseData, $status = 200, $headers = [], $context = []);
+    }
+
+    /**
+     * @Route("/beacon", name="beacon")
+     */
+    public function beaconInfo(
+        Request $request
+    ){
+
+        //$data = json_decode($request->getContent());
+        $data = $this->beaconService->getBeaconData($request->get('beaconAddress'));
+        return $this->json(json_encode($data), $status = 200, $headers = [], $context = []);
     }
 }

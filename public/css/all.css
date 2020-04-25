@@ -47,7 +47,7 @@ h1 {
 }
 
 .last-use-info {
-    width: 15%;
+    width: 22%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -69,7 +69,7 @@ h1 {
     align-items: center;
     color: #21acd4;
     font-weight: 900;
-    font-size: 25px;
+    font-size: 20px;
 }
 
 .last-use-container span {

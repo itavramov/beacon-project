@@ -2,59 +2,144 @@
 
 namespace App\BeaconService;
 
+use App\Entity\Beacon;
 use App\Entity\BeaconData;
+use App\Entity\Ping;
 use Doctrine\ORM\EntityManagerInterface;
+use Faker\Provider\DateTime;
+use function Sodium\add;
 
 class BeaconService
 {
     protected $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager
+    ) {
         $this->entityManager = $entityManager;
     }
 
-    public function storeBeaconHit($data)
+    public function storeDetectSignal($data)
     {
         $isStored = false;
-        $beaconHit = $this->checkBeaconHitExists($data['beacon-hit-id']);
+        $ping = new Ping();
 
-        //TODO Serializer for the json data
-        //$data = \GuzzleHttp\json_decode($data);
+        $date = new \DateTime();
+        $date->setTimezone(new \DateTimeZone('Europe/Amsterdam'));
 
-        if (!$beaconHit) {
-            $beaconHit = new BeaconData();
-        }
+        $ping
+            ->setDeviceAddress($data['deviceAddress']);
+        $ping
+            ->setRoom($data['tableId']);
+        $ping
+            ->setDetectTime($date);
 
-        $beaconHit->setBeaconId($data['beacon_id']);
-        $beaconHit->setConnected($data['connected']);
-        $beaconHit->setDisconnected($data['disconnected']);
-        $beaconHit->setDeviceId($data['device_id']);
-        $beaconHit->setBeaconRoom($data['beacon_room']);
-
-        $this->entityManager->persist($beaconHit);
+        $this->entityManager->persist($ping);
         $this->entityManager->flush();
 
-        if ($beaconHit->getId()) {
+        if ($ping->getId()) {
             $isStored = true;
         }
 
         return $isStored;
     }
 
-    public function checkBeaconHitExists($beaconHitId)
+    public function updateBeaconConnectionTime($data)
     {
-        $isAlreadyStored = false;
+        $isUpdated = false;
+        $date = new \DateTime();
+        $date->setTimezone(new \DateTimeZone('Europe/Amsterdam'));
 
-        $beaconHit = $this->entityManager
-            ->getRepository(BeaconData::class)
-            ->find($beaconHitId);
+        $beacon = $this->entityManager
+            ->getRepository(Beacon::class)
+            ->findOneBy(
+                [
+                    'deviceAddress' => $data['deviceAddress']
+                ]
+            );
 
-        return $beaconHit;
+        if ($beacon) {
+            $beacon->setConnectionTime(
+                $date
+            );
+
+            $beacon->setDisconnectionTime(null);
+
+            $beacon->
+                setRoom(
+                    $data['tableId']
+            );
+
+            $isUpdated = true;
+        }
+
+        $this->entityManager->persist($beacon);
+        $this->entityManager->flush();
+
+        return $isUpdated;
     }
 
-    public function beaconDataNormilizer()
+    public function updateBeaconDisconnectionTime($data)
     {
+        $isUpdated = false;
+        $date = new \DateTime();
+        $date->setTimezone(new \DateTimeZone('Europe/Amsterdam'));
 
+        $beacon = $this->entityManager
+            ->getRepository(Beacon::class)
+            ->findOneBy(
+                [
+                    'deviceAddress' => $data['deviceAddress']
+                ]
+            );
+
+        if ($beacon) {
+            $beacon->setDisconnectionTime(
+                $date
+            );
+
+            $beacon->
+            setRoom(
+                $data['tableId']
+            );
+
+            $isUpdated = true;
+        }
+
+        $this->entityManager->persist($beacon);
+        $this->entityManager->flush();
+
+        return $isUpdated;
+    }
+
+    public function getBeaconData($deviceAddress)
+    {
+        $data = [
+            'status' => 'error'
+        ];
+        $beacon = $this->entityManager
+            ->getRepository(Beacon::class)
+            ->findOneBy(
+                [
+                    'deviceAddress' => $deviceAddress
+                ]
+            );
+
+        if ($beacon) {
+            $disconnectTime = $beacon->getDisconnectionTime();
+            if (!$disconnectTime) {
+                $disconnectTime = '-';
+            }
+
+            $data = [
+                'equipment' => $beacon->getEquipment(),
+                'connectTime' => $beacon->getConnectionTime(),
+                'disconnectTime' => $disconnectTime,
+                'room' => $beacon->getRoom(),
+                'status' => 'ok'
+            ];
+        }
+
+        return $data;
     }
 }
