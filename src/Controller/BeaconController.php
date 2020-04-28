@@ -40,6 +40,7 @@ class BeaconController extends AbstractController
 //            'tableId' => 'Room 15'
 //        ];
         $data = json_decode(json_encode($data), true);
+        $this->logger->info(print_r($data, true));
         $responseData = [ 'isStored' => false ];
 
         if ($this->beaconService->storeDetectSignal($data)) {
@@ -58,6 +59,7 @@ class BeaconController extends AbstractController
 
         $data = json_decode($request->getContent());
         $data = json_decode(json_encode($data), true);
+        $this->logger->info(print_r($data, true));
 //        $data = [
 //            'deviceAddress' => "FA:42:CD:E1:FF:B0",
 //            'tableId' => 'Room 155'
@@ -79,6 +81,7 @@ class BeaconController extends AbstractController
     ){
         $data = json_decode($request->getContent());
         $data = json_decode(json_encode($data), true);
+        $this->logger->info(print_r($data, true));
 //        $data = [
 //            'deviceAddress' => "FA:42:CD:E1:FF:B0",
 //            'tableId' => 'Room 15'
