@@ -30,7 +30,7 @@ class BeaconService
         $ping
             ->setDeviceAddress($data['deviceAddress']);
         $ping
-            ->setRoom($data['tableId']);
+            ->setRoom($data['tabletID']);
         $ping
             ->setDetectTime($date);
 
@@ -67,7 +67,7 @@ class BeaconService
 
             $beacon->
                 setRoom(
-                    $data['tableId']
+                    $data['tabletID']
             );
 
             $isUpdated = true;
@@ -100,7 +100,7 @@ class BeaconService
 
             $beacon->
             setRoom(
-                $data['tableId']
+                $data['tabletID']
             );
 
             $isUpdated = true;
