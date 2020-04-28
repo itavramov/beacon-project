@@ -77,6 +77,7 @@ class BeaconController extends AbstractController
 //            'deviceAddress' => "FA:42:CD:E1:FF:B0",
 //            'tableId' => 'Room 15'
 //        ];
+        dump($data);die;
         $responseData = [ 'isStored' => false ];
 
         if ($this->beaconService->updateBeaconDisconnectionTime($data)) {
@@ -93,7 +94,7 @@ class BeaconController extends AbstractController
         Request $request
     ){
         $data = $this->beaconService->getBeaconData($request->get('beaconAddress'));
-        
+
         return $this->json(json_encode($data), $status = 200, $headers = [], $context = []);
     }
 }
