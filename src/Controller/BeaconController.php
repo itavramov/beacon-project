@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\BeaconService\BeaconService;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,13 +15,16 @@ class BeaconController extends AbstractController
 {
     protected $beaconService;
     protected $entityManager;
+    protected $logger;
 
     public function __construct(
         BeaconService $beaconService,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        LoggerInterface $logger
     ) {
         $this->beaconService = $beaconService;
         $this->entityManager = $entityManager;
+        $this->logger = $logger;
     }
 
     /**
@@ -35,6 +39,7 @@ class BeaconController extends AbstractController
 //          'deviceAddress' => "FA:42:CD:E1:FF:B0",
 //            'tableId' => 'Room 15'
 //        ];
+        $data = json_decode(json_encode($data), true);
         $responseData = [ 'isStored' => false ];
 
         if ($this->beaconService->storeDetectSignal($data)) {
@@ -52,6 +57,7 @@ class BeaconController extends AbstractController
     ){
 
         $data = json_decode($request->getContent());
+        $data = json_decode(json_encode($data), true);
 //        $data = [
 //            'deviceAddress' => "FA:42:CD:E1:FF:B0",
 //            'tableId' => 'Room 155'
@@ -71,13 +77,12 @@ class BeaconController extends AbstractController
     public function beaconDisconnect(
         Request $request
     ){
-
         $data = json_decode($request->getContent());
+        $data = json_decode(json_encode($data), true);
 //        $data = [
 //            'deviceAddress' => "FA:42:CD:E1:FF:B0",
 //            'tableId' => 'Room 15'
 //        ];
-        dump($data);die;
         $responseData = [ 'isStored' => false ];
 
         if ($this->beaconService->updateBeaconDisconnectionTime($data)) {
