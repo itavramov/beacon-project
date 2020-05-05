@@ -11,7 +11,7 @@ h1 {
     color: #21acd4;
 }
 
-.container {
+.container-main {
     width: 80%;
     max-width: 1400px;
     margin: auto;
@@ -41,9 +41,10 @@ h1 {
     justify-content: space-around;
     width: 100%;
     margin: auto;
-    height: 75px;
+    height: 120px;
     border: 2px solid #21acd4;
     border-radius: 4px;
+    text-align: center;
 }
 
 .last-use-info {
@@ -98,4 +99,11 @@ footer {
     color: #828282;
     padding-left: 15px;
     font-style: italic;
+}
+
+@media screen and (max-width: 736px) {
+    .beacon-img {
+        width: 50%;
+        margin-left: 25%;
+    }
 }

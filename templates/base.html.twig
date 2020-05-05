@@ -12,10 +12,10 @@
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
     </head>
     <body>
-    <div class="container">
+    <div class="container-main">
         <div class="project-info">
             <img src="{{ asset('images/logo.png') }}" alt="Beacon Logo">
-            <h1>The Beacon Project</h1>
+            <h1>Medifinder</h1>
         </div>
         <h2 class="last-use-header">Last Beacon Connection:</h2>
         <div class="form-group">
@@ -23,7 +23,7 @@
             <select class="form-control" id="exampleFormControlSelect1" onchange="beaconFilter(this.value)">
                 <option>Pick Address</option>
                 {% for beacon in beacons %}
-                    <option value="{{ beacon.deviceAddress }}">{{ beacon.deviceAddress }}</option>
+                    <option value="{{ beacon.deviceAddress }}">{{ beacon.equipment }}</option>
                 {% endfor %}
             </select>
         </div>
