@@ -50,7 +50,7 @@
             </div>
             <div class="last-use-info">
                 <h2>Detect Time:</h2>
-                <div class="data" id="connectTime">
+                <div class="data" id="detectTime">
                     {% if lastPing.detectTime is null %}
                         -
                     {% else %}
@@ -102,18 +102,15 @@
                 success: function (obj) {
                     obj = JSON.parse(obj);
                     if (obj.status == "ok") {
-                        if (!obj.disconnectTime || obj.disconnectTime == '-') {
-                            obj.disconnectTime = "-";
+                        if (!obj.detectTime || obj.detectTime == '-') {
+                            obj.detectTime = "-";
                         } else {
-                            console.log(obj.disconnectTime)
-                            obj.disconnectTime = obj.disconnectTime.date.replace('.000000','');
+                            obj.detectTime = obj.detectTime.date.replace('.000000','');
                         }
 
                         $('#equipment').text(obj.equipment);
-                        // $('#connectTime').text(obj.connectTime.date.replace('.000000',''));
-                        $('#disconnectTime').text(obj.detectTime);
+                        $('#detectTime').text(obj.detectTime);
                         $('#deviceRoom').text(obj.room);
-
                         var table = $('#example').DataTable();
                         table.column().search(obj.equipment).draw();
                     }
