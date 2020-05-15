@@ -101,7 +101,7 @@ class BeaconController extends AbstractController
     public function beaconInfo(
         Request $request
     ){
-        $data = $this->beaconService->getBeaconData($request->get('beaconAddress'));
+        $data = $this->beaconService->getLastDetect($request->get('beaconAddress'));
 
         return $this->json(json_encode($data), $status = 200, $headers = [], $context = []);
     }

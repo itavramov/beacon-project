@@ -31,6 +31,12 @@ class Ping
      */
     private $room;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $equipment;
+    
+
     public function getId(): ?int
     {
         return $this->id;
@@ -68,6 +74,18 @@ class Ping
     public function setRoom(string $room): self
     {
         $this->room = $room;
+
+        return $this;
+    }
+
+    public function getEquipment(): ?string
+    {
+        return $this->equipment;
+    }
+
+    public function setEquipment(string $equipment): self
+    {
+        $this->equipment = $equipment;
 
         return $this;
     }

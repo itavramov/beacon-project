@@ -23,10 +23,14 @@ class IndexController extends AbstractController
      * @Route("/", name="index")
      */
     public function index() {
+
+//        dump($this->entityManager->getRepository(Ping::class)->findLastDetectSignal());
+//        die;
+
         return $this->render(
             'base.html.twig',
             [
-                'lastBeacon' => $this->entityManager->getRepository(Beacon::class)->findAllBeaconsFilterByConnectionTime()[0],
+                'lastPing' => $this->entityManager->getRepository(Ping::class)->findLastDetectSignal()[0],
                 'pings' => $this->entityManager->getRepository(Ping::class)->findAll(),
                 'beacons' => $this->entityManager->getRepository(Beacon::class)->findAll()
             ]

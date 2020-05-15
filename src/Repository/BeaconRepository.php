@@ -27,6 +27,22 @@ class BeaconRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findBeaconEquipment($beaconAddress)
+    {
+        $qb = $this
+            ->createQueryBuilder('b')
+            ->where('b.deviceAddress = :beaconAddress')
+            ->setParameter('beaconAddress', $beaconAddress)
+            ->getQuery()
+            ->getOneOrNullResult(
+
+            );
+
+        return $qb;
+    }
+
+
+
     // /**
     //  * @return Beacon[] Returns an array of Beacon objects
     //  */

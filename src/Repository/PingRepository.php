@@ -23,6 +23,28 @@ class PingRepository extends ServiceEntityRepository
         return $this->findBy(array(), array('detectTime' => 'DESC'));
     }
 
+    public function findLastDetectByBeaconAddress($beaconAddress)
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->where('p.deviceAddress = :beaconAddress')
+            ->setParameter('beaconAddress', $beaconAddress)
+            ->orderBy('p.detectTime', 'DESC');
+
+        $query = $qb->getQuery();
+
+        return $query->execute();
+    }
+
+    public function findLastDetectSignal()
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->orderBy('p.detectTime', 'DESC')
+            ->getQuery()
+            ->execute();
+
+        return $qb;
+    }
+
     // /**
     //  * @return Ping[] Returns an array of Ping objects
     //  */

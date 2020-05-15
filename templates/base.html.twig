@@ -31,29 +31,31 @@
             <div class="last-use-info">
                 <h2>Equipment:</h2>
                 <div class="data" id="equipment">
-                    {{ lastBeacon.equipment }}
-                </div>
-            </div>
-            <div class="last-use-info">
-                <h2>Connect Time:</h2>
-                <div class="data" id="connectTime">
-                    {{ lastBeacon.connectionTime|date('m-d-Y H:i:s') }}
-                </div>
-            </div>
-            <div class="last-use-info">
-                <h2>Disconnect Time:</h2>
-                <div class="data" id="disconnectTime">
-                    {% if lastBeacon.disconnectionTime is null %}
+                    {% if lastPing.equipment is null %}
                         -
                     {% else %}
-                        {{ lastBeacon.disconnectionTime|date('m-d-Y H:i:s') }}
+                        {{ lastPing.equipment }}
                     {% endif %}
                 </div>
             </div>
             <div class="last-use-info">
                 <h2>Device Room:</h2>
                 <div class="data" id="deviceRoom">
-                    {{ lastBeacon.room }}
+                    {% if lastPing.room is null %}
+                        -
+                    {% else %}
+                        {{ lastPing.room }}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="last-use-info">
+                <h2>Detect Time:</h2>
+                <div class="data" id="connectTime">
+                    {% if lastPing.detectTime is null %}
+                        -
+                    {% else %}
+                        {{ lastPing.detectTime|date('m-d-Y H:i:s') }}
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -62,7 +64,7 @@
         <table id="example" class="table table-striped table-bordered" style="width:100%">
             <thead>
             <tr>
-                <th>Beacon Address</th>
+                <th>Equipment</th>
                 <th>Detect Time</th>
                 <th>Device Room</th>
             </tr>
@@ -70,7 +72,7 @@
             <tbody>
             {% for ping in pings %}
                 <tr>
-                    <td>{{ ping.deviceAddress }}</td>
+                    <td>{{ ping.equipment }}</td>
                     <td>{{ ping.detectTime|date('m-d-Y H:i:s') }}</td>
                     <td>{{ ping.room }}</td>
                 </tr>
@@ -108,9 +110,12 @@
                         }
 
                         $('#equipment').text(obj.equipment);
-                        $('#connectTime').text(obj.connectTime.date.replace('.000000',''));
-                        $('#disconnectTime').text(obj.disconnectTime);
+                        // $('#connectTime').text(obj.connectTime.date.replace('.000000',''));
+                        $('#disconnectTime').text(obj.detectTime);
                         $('#deviceRoom').text(obj.room);
+
+                        var table = $('#example').DataTable();
+                        table.column().search(obj.equipment).draw();
                     }
                 },
                 error: function () {

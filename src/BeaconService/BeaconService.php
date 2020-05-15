@@ -33,6 +33,13 @@ class BeaconService
             ->setRoom($data['tabletID']);
         $ping
             ->setDetectTime($date);
+        $ping
+            ->setEquipment(
+                $this->entityManager
+                    ->getRepository(Beacon::class)
+                    ->findBeaconEquipment($ping->getDeviceAddress())
+                    ->getEquipment()
+            );
 
         $this->entityManager->persist($ping);
         $this->entityManager->flush();
@@ -136,6 +143,28 @@ class BeaconService
                 'connectTime' => $beacon->getConnectionTime(),
                 'disconnectTime' => $disconnectTime,
                 'room' => $beacon->getRoom(),
+                'status' => 'ok'
+            ];
+        }
+
+        return $data;
+    }
+
+    public function getLastDetect($deviceAddress)
+    {
+        $data = [
+            'status' => 'error'
+        ];
+        $lastPing = $this->entityManager
+            ->getRepository(Ping::class)
+            ->findLastDetectByBeaconAddress($deviceAddress);
+
+        if ($lastPing) {
+
+            $data = [
+                'equipment' => $lastPing[0]->getEquipment(),
+                'detectTime' => $lastPing[0]->getDetectTime(),
+                'room' => $lastPing[0]->getRoom(),
                 'status' => 'ok'
             ];
         }
